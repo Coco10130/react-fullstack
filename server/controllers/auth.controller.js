@@ -2,25 +2,37 @@ const Auth = require("../models/auth.model.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const {
+  hashPassword,
+  comparePasswords,
+} = require("../helpers/authenticate.js");
 
 require("dotenv").config();
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
-    const user = await Auth.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const { email, password } = req.body;
+
+    // Check if the user entered email address
+    if (email === "") {
+      return res.status(200).json({ message: "Email is required" });
     }
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const jwtSecret = process.env.JWT_SECRET || "fallback_secret";
-      const token = jwt.sign({ userId: user._id }, jwtSecret, {
-        expiresIn: "30d",
-      });
+    // check if use exists
+    const user = await Auth.findOne({ email });
 
-      res.status(200).json({ message: "Login successful", token });
-    } else res.status(400).json({ message: "Invalid credentials" });
+    if (!user) {
+      return res.status(200).json({ message: "User not found" });
+    }
+
+    // Check if password match
+    const match = await comparePasswords(password, user.password);
+
+    if (match) {
+      return res.status(200).json({ success: "Password match" });
+    } else {
+      return res.status(201).json({ message: "Password not match" });
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -28,15 +40,42 @@ const login = async (req, res) => {
 
 const registerAccount = async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const { email, userName, password } = req.body;
+
+    // Check if name is entered
+    if (!userName) {
+      return res.status(201).json({ message: "Please enter name" });
+    }
+
+    // Check if password is good
+    if (!password || password.length < 8) {
+      return res.status(201).json({
+        message: "Password is required and at least 8 characters long",
+      });
+    }
+
+    // Check if email is entered
+    if (!email) {
+      return res.status(201).json({ message: "Please enter email" });
+    }
+
+    // Check email
+    const exist = await Auth.findOne({ email });
+
+    if (exist) {
+      return res.status(201).json({ message: "Email is already taken" });
+    }
+
+    // Hash password
+    const hashedPassword = await hashPassword(password);
     const userData = {
-      userName: req.body.userName,
-      email: req.body.email,
+      userName,
+      email,
       password: hashedPassword,
     };
 
     await Auth.create(userData);
-    res.status(200).json({ message: "Account created successfully" });
+    res.status(200).json({ success: "Account created successfuly" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

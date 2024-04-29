@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "../axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    price: 0,
-    quantity: 0,
-  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const nameRef = useRef();
+  const priceRef = useRef();
+  const quantityRef = useRef();
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -39,17 +39,23 @@ const Products = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    console.log("product added");
+    const payload = {
+      name: nameRef.current.value,
+      price: priceRef.current.value,
+      quantity: quantityRef.current.value,
+    };
+
     try {
-      const response = await axios.post("/api/products", newProduct);
-      setProducts([...products, response.data]);
-      setNewProduct({
-        name: "",
-        price: 0,
-        quantity: 0,
-      });
+      const { response } = await axios.post("/api/products", payload);
+
+      if (response.message) {
+        toast.error(response.message);
+      } else if (response.success) {
+        toast.success(response.success);
+        setProducts([...products, response.data]);
+      }
     } catch (error) {
-      console.error(`Error: ${error}`);
+      console.error(error);
     }
   };
 
@@ -57,31 +63,22 @@ const Products = () => {
     <>
       <div className="container mt-5 d-flex flex-column justify-content-center align-items-center mb-5">
         <h2 className="mb-5 title">Products</h2>
+        <Toaster />
 
         <div className="product-input-container">
           <form
             onSubmit={handleAddProduct}
             className="d-flex flex-row align-items-center justify-content-center"
           >
-            <input
-              type="text"
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, name: e.target.value })
-              }
-              placeholder="Enter product name"
-            />
+            <input type="text" ref={nameRef} placeholder="Enter product name" />
             <input
               type="number"
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, price: e.target.value })
-              }
+              ref={priceRef}
               placeholder="Enter product price"
             />
             <input
               type="number"
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, quantity: e.target.value })
-              }
+              ref={quantityRef}
               placeholder="Enter product quantity"
             />
             <button
@@ -109,15 +106,25 @@ const Products = () => {
                     <p className="product-title mb-3">Name</p>
                     <span className="text">{product.name}</span>
                   </div>
+
                   <div className="col-3 text-center mb-2">
                     <p className="product-title mb-3">Price</p>
                     <span className="text">{product.price}</span>
                   </div>
+
                   <div className="col-3 text-center mb-2">
                     <p className="product-title mb-3">Quantity</p>
                     <span className="text">{product.quantity}</span>
                   </div>
+
                   <div className="col-3 d-flex justify-content-end align-items-center">
+                    <button
+                      onClick={() => handleUpdate(product._id)}
+                      className="update-btn btn btn-secondary"
+                    >
+                      Update
+                    </button>
+
                     <button
                       onClick={() => handleDelete(product._id)}
                       className="delete-btn btn btn-danger"

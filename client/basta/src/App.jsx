@@ -1,10 +1,17 @@
+import Register from "./views/Register";
 import Login from "./views/Login";
+import Products from "./views/Products";
 import "./App.css";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Login />
+      <Routes>
+        <Route path="/" element={<Products />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
     </>
   );
 }

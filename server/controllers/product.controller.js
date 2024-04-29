@@ -23,28 +23,15 @@ const addProduct = async (req, res) => {
   try {
     const newProduct = req.body;
 
-    const formattedName = newProduct.name.trim().toLowerCase();
-    const priceToAdd = parseInt(newProduct.price);
-    const quantityToAdd = parseInt(newProduct.quantity);
-
-    const newRequest = {
-      name: formattedName,
-      price: priceToAdd,
-      quantity: quantityToAdd,
-    };
-
-    const existingProduct = await Product.findOne({ name: formattedName });
+    const existingProduct = await Product.findOne({ name: newProduct.name });
 
     if (existingProduct) {
-      existingProduct.price += priceToAdd;
-      existingProduct.quantity += quantityToAdd;
-
-      await existingProduct.save();
-
-      res.status(201).json(existingProduct);
+      return res.status(200).json({ message: "Product already exists" });
     } else {
-      const product = await Product.create(newRequest);
-      res.status(200).json(product);
+      const product = await Product.create(newProduct);
+      return res
+        .status(200)
+        .json({ success: "Product created successfully" }, product);
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

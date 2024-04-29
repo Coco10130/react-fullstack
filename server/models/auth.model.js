@@ -5,20 +5,20 @@ const AuthSchema = mongoose.Schema(
   {
     userName: {
       type: String,
-      required: [true, "Add a user name"],
+      required: true,
       unique: true,
     },
 
     email: {
       type: String,
-      required: [true, "Add a email"],
+      required: true,
       unique: true,
     },
 
     password: {
       type: String,
-      required: [true, "Add a password"],
-      minLength: [8, "Password must be at least 8 characters"],
+      required: true,
+      minLength: 8,
     },
   },
   {

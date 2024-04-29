@@ -136,7 +136,7 @@ html {
 }
 
 .delete-btn {
-    margin-right: 25px;
+    margin: 0 25px;
 }
 
 /* LOGIN CSS */
@@ -163,7 +163,8 @@ html {
     font-family: 'Oswald';
 }
 
-.login-form input {
+.login-form input[type="email"], 
+.login-form input[type="password"] {
     width: 20rem;
     height: 2.5rem;
     font-family: 'Poppins';
@@ -176,10 +177,6 @@ html {
     transition: border-color 0.5s ease;
 }
 
-.login-form input::placeholder {
-    color: hsl(0, 0%, 90%);
-}
-
 .login-form input:focus {
     border-color: hsl(255, 92%, 76%) !important;
     outline: none;
@@ -187,26 +184,92 @@ html {
     transition: border-color 0.5s ease, box-shadow 0.3s ease;
 }
 
-.login-form button { 
+.login-form input::placeholder {
+    color: hsl(0, 0%, 90%) !important;
+}
+
+.login-form .register-here {
+    color: hsl(0, 0%, 95%) !important;
+    margin-top: 20px;
+    font-family: 'Poppins';
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.login-form .login-button {
     font-family: 'Oswald';
     border: 1px solid hsl(0, 0%, 50%);
     background-color: hsl(0, 0%, 100%);
-    border-radius: 10px;
     padding: 5px 10px;
     transition: background-color 0.5s ease;
     margin-top: 20px;
     cursor: pointer;
     font-size: 1.2rem;
+    border-radius: 10px;
 }
 
-.login-form .forgot-password {
+/* REGISTER CSS */
+
+.register-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.register {
+    border: 1px solid hsl(0, 0%, 20%);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 20px;
+    background-color: hsl(0, 0%, 10%);
+}
+
+.register .register-text {
     color: hsl(0, 0%, 95%) !important;
-    text-align: end;
-    font-family: 'Poppins';
-    cursor: pointer;
+    font-size: 3rem;
+    margin: 40px;
+    font-family: 'Oswald';
 }
 
-.login-form .register-here {
+.register-form input {
+    width: 20rem;
+    height: 2.5rem;
+    font-family: 'Poppins';
+    padding: 10px;
+    border: 1px solid hsl(0, 0%, 90%);
+    border-radius: 10px;
+    margin: 10px;
+    background-color: hsl(0, 0%, 10%);
+    color: hsl(0, 0%, 95%) !important;
+    transition: border-color 0.5s ease;
+}
+
+.register-form input::placeholder {
+    color: hsl(0, 0%, 90%) !important;
+}
+
+.register-form input:focus {
+    border-color: hsl(255, 92%, 76%) !important;
+    outline: none;
+    box-shadow: 0 0 10px hsl(255, 92%, 76%);
+    transition: border-color 0.5s ease, box-shadow 0.3s ease;
+}
+
+.register-form button {
+    font-family: 'Oswald';
+    border: 1px solid hsl(0, 0%, 50%);
+    background-color: hsl(0, 0%, 100%);
+    padding: 5px 10px;
+    transition: background-color 0.5s ease;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    border-radius: 10px;
+}
+
+.register-form .login-here {
     color: hsl(0, 0%, 95%) !important;
     margin-top: 20px;
     font-family: 'Poppins';

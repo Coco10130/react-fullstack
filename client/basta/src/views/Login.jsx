@@ -1,21 +1,28 @@
-import { useState } from "react";
+import { useRef } from "react";
 import axios from "../axios";
+import toast, { Toaster } from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [login, setLogin] = useState({
-    email: "",
-    password: "",
-  });
+  const navigate = useNavigate();
+  const email = useRef();
+  const password = useRef();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      email: email.current.value,
+      password: password.current.value,
+    };
     try {
-      await axios.post("/api/auth", login);
-      setLogin({
-        email: "",
-        password: "",
-      });
-      console.log("login successful");
+      const { data } = await axios.post("/api/auth/login", payload);
+
+      if (data.message) {
+        toast.error(data.message);
+      } else {
+        navigate("/");
+        toast.success(data.success);
+      }
     } catch (error) {
       console.error(`Error: ${error}`);
     }
@@ -23,29 +30,22 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <Toaster />
       <div className="login">
         <h2 className="login-text">Login</h2>
-        <form onSubmit={handleSubmit} className="login-form">
-          <input
-            type="text"
-            onChange={(e) => setLogin({ ...login, email: e.target.value })}
-            placeholder="Enter email"
-          />{" "}
+        <form className="login-form" onSubmit={handleSubmit}>
+          <input type="email" ref={email} placeholder="Enter Email" />
+          <br />
+          <input type="password" ref={password} placeholder="Enter Password" />
           <br />
           <input
-            type="password"
-            onChange={(e) => setLogin({ ...login, password: e.target.value })}
-            placeholder="Enter password"
-          />{" "}
-          <br />
-          <p className="forgot-password">forgot password</p>
-          <button
             type="submit"
-            className="login-button btn btn-outline-secondary"
-          >
-            Login
-          </button>
-          <p className="register-here">No Account yet? Register here</p>
+            className="login-button btn btn-outline-secondary m-5"
+          />
+
+          <p className="register-here">
+            No Account yet? <Link to="/register">Register Here</Link>
+          </p>
         </form>
       </div>
     </div>

@@ -11,7 +11,7 @@ router.post("/register", registerAccount);
 
 router.post("/login", login);
 
-router.get("/", showAccounts);
+router.get("/showAccounts", showAccounts);
 
 router.delete("/:id", deleteAccount);
 
