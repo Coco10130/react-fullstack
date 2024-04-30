@@ -1,7 +1,5 @@
 const Auth = require("../models/auth.model.js");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
 const {
   hashPassword,
   comparePasswords,
@@ -29,7 +27,15 @@ const login = async (req, res) => {
     const match = await comparePasswords(password, user.password);
 
     if (match) {
-      return res.status(200).json({ success: "Password match" });
+      jwt.sign(
+        { email: user.email, id: user._id, name: user.userName },
+        process.env.JWT_SECRET,
+        {},
+        (err, token) => {
+          if (err) throw err;
+          res.cookie("token", token).json(user);
+        }
+      );
     } else {
       return res.status(201).json({ message: "Password not match" });
     }

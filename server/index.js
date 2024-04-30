@@ -4,9 +4,12 @@ const productRouter = require("./routes/product.route.js");
 const authRouter = require("./routes/auth.route.js");
 const cors = require("cors");
 const app = express();
+const cookieParser = require("cookie-parser");
 
 //middelware
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173",

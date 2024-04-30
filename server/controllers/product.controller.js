@@ -21,35 +21,54 @@ const getSingleProduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const newProduct = req.body;
-
-    const existingProduct = await Product.findOne({ name: newProduct.name });
+    const existingProduct = await Product.findOne({ name: req.body.name });
 
     if (existingProduct) {
       return res.status(200).json({ message: "Product already exists" });
-    } else {
-      const product = await Product.create(newProduct);
-      return res
-        .status(200)
-        .json({ success: "Product created successfully" }, product);
     }
+
+    const productName = req.body.name.trim().toLowerCase();
+
+    const formattedProduct = {
+      name: productName,
+      description: req.body.description,
+      price: req.body.price,
+      quantity: req.body.quantity,
+    };
+
+    const product = await Product.create(formattedProduct);
+    res
+      .status(201)
+      .json({ success: "Product added successfully", data: product });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const updateProuct = async (req, res) => {
+const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Product.findByIdAndUpdate(id, req.body);
+    const quantity = parseFloat(req.body.quantity);
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+    if (Number.isInteger(quantity)) {
+      const product = await Product.findByIdAndUpdate(id, req.body);
+
+      if (!product) {
+        return res.status(200).json({ message: "Product not found" });
+      }
+
+      const updatedProduct = await Product.findById(id);
+
+      return res.status(200).json({
+        success: "Product updated successfully",
+        data: updatedProduct,
+      });
+    } else {
+      return res.status(200).json({
+        message:
+          "The quantity should be a non-decimal number, represented as an integer value.",
+      });
     }
-
-    const updatedProduct = await Product.findById(id);
-
-    res.status(200).json(updatedProduct);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -64,7 +83,7 @@ const deleteProduct = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    res.status(200).json({ message: "Product deleted successfully!" });
+    res.status(200).json({ success: "Product deleted successfully!" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -74,6 +93,6 @@ module.exports = {
   getProducts,
   getSingleProduct,
   addProduct,
-  updateProuct,
+  updateProduct,
   deleteProduct,
 };

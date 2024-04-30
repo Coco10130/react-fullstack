@@ -1,15 +1,30 @@
 body {
-    background-color: hsl(0, 0%, 90%);
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
+    justify-content: center;
+    flex-direction: row;
 }
+
 
 html {
     scroll-behavior: smooth;
 }
+
+/* NAVBAR CSS */
+
+.navbar-container {
+    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 5.5rem;
+    background-color: hsl(0, 0%, 95%);
+    border-radius: 20px;
+}
+
+
+/* PRODUCT CSS */
 
 .list-container .lists {
     background-color: hsl(0, 0%, 95%);
@@ -142,6 +157,7 @@ html {
 /* LOGIN CSS */
 
 .login-container {
+    margin-top: 50px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -172,8 +188,7 @@ html {
     border: 1px solid hsl(0, 0%, 90%);
     border-radius: 10px;
     margin: 10px;
-    background-color: hsl(0, 0%, 10%);
-    color: hsl(0, 0%, 95%) !important;
+    color: hsl(0, 0%, 10%) !important;
     transition: border-color 0.5s ease;
 }
 
@@ -185,7 +200,7 @@ html {
 }
 
 .login-form input::placeholder {
-    color: hsl(0, 0%, 90%) !important;
+    color: hsl(0, 0%, 10%) !important;
 }
 
 .login-form .register-here {
@@ -211,17 +226,17 @@ html {
 /* REGISTER CSS */
 
 .register-container {
+    margin-top: 50px;
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .register {
-    border: 1px solid hsl(0, 0%, 20%);
-    border-radius: 10px;
-    padding: 20px;
     text-align: center;
+    border: 1px solid hsl(0, 0%, 20%);
+    padding: 20px;
     border-radius: 20px;
     background-color: hsl(0, 0%, 10%);
 }
@@ -241,13 +256,12 @@ html {
     border: 1px solid hsl(0, 0%, 90%);
     border-radius: 10px;
     margin: 10px;
-    background-color: hsl(0, 0%, 10%);
-    color: hsl(0, 0%, 95%) !important;
+    color: hsl(0, 0%, 10%) !important;
     transition: border-color 0.5s ease;
 }
 
 .register-form input::placeholder {
-    color: hsl(0, 0%, 90%) !important;
+    color: hsl(0, 0%, 10%) !important;
 }
 
 .register-form input:focus {

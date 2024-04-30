@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "../axios";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [editableProductId, setEditableProductId] = useState(null);
   const nameRef = useRef();
   const priceRef = useRef();
   const quantityRef = useRef();
+  const updatePrice = useRef();
+  const updateQuantity = useRef();
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -28,8 +30,11 @@ const Products = () => {
   const handleDelete = async (id) => {
     const productId = id;
     try {
-      await axios.delete(`/api/products/${productId}`);
-      setProducts(products.filter((product) => product._id !== productId));
+      const { data } = await axios.delete(`/api/products/${productId}`);
+      if (data.success) {
+        toast.success(data.success);
+        setProducts(products.filter((product) => product._id !== productId));
+      }
     } catch (error) {
       console.error(`Error: ${error}`);
     } finally {
@@ -39,20 +44,56 @@ const Products = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    const payload = {
-      name: nameRef.current.value,
-      price: priceRef.current.value,
-      quantity: quantityRef.current.value,
+
+    try {
+      const payload = {
+        name: nameRef.current.value,
+        price: priceRef.current.value,
+        quantity: quantityRef.current.value,
+      };
+
+      const { data } = await axios.post("/api/products", payload);
+
+      if (data.message) {
+        toast.error(data.message);
+      } else if (data.success) {
+        toast.success(data.success);
+        setProducts((products) => [...products, data.data]);
+        nameRef.current.value = "";
+        priceRef.current.value = "";
+        quantityRef.current.value = "";
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleUpdate = async (id) => {
+    setEditableProductId(id);
+  };
+
+  const handleSaveUpdate = async (id) => {
+    const updatedProduct = {
+      price: parseFloat(updatePrice.current.value),
+      quantity: parseFloat(updateQuantity.current.value),
     };
 
     try {
-      const { response } = await axios.post("/api/products", payload);
+      const { data } = await axios.put(`/api/products/${id}`, updatedProduct);
 
-      if (response.message) {
-        toast.error(response.message);
-      } else if (response.success) {
-        toast.success(response.success);
-        setProducts([...products, response.data]);
+      if (data.success) {
+        toast.success(data.success);
+
+        setProducts((prevProducts) =>
+          prevProducts.map((product) =>
+            product._id === id ? { ...product, ...updatedProduct } : product
+          )
+        );
+
+        setEditableProductId(null);
+      } else {
+        toast.error(data.message);
+        setEditableProductId(null);
       }
     } catch (error) {
       console.error(error);
@@ -109,21 +150,48 @@ const Products = () => {
 
                   <div className="col-3 text-center mb-2">
                     <p className="product-title mb-3">Price</p>
-                    <span className="text">{product.price}</span>
+                    {editableProductId === product._id ? (
+                      <input
+                        type="number"
+                        defaultValue={product.price}
+                        ref={updatePrice}
+                        className="update-price"
+                      />
+                    ) : (
+                      <span className="text">{product.price}</span>
+                    )}
                   </div>
 
                   <div className="col-3 text-center mb-2">
                     <p className="product-title mb-3">Quantity</p>
-                    <span className="text">{product.quantity}</span>
+                    {editableProductId === product._id ? (
+                      <input
+                        type="number"
+                        defaultValue={product.quantity}
+                        ref={updateQuantity}
+                        className="update-quantity"
+                      />
+                    ) : (
+                      <span className="text">{product.quantity}</span>
+                    )}
                   </div>
 
                   <div className="col-3 d-flex justify-content-end align-items-center">
-                    <button
-                      onClick={() => handleUpdate(product._id)}
-                      className="update-btn btn btn-secondary"
-                    >
-                      Update
-                    </button>
+                    {editableProductId === product._id ? (
+                      <button
+                        onClick={() => handleSaveUpdate(product._id)}
+                        className="update-btn btn btn-secondary"
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleUpdate(product._id)}
+                        className="update-btn btn btn-secondary"
+                      >
+                        Update
+                      </button>
+                    )}
 
                     <button
                       onClick={() => handleDelete(product._id)}

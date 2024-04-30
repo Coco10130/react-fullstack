@@ -34,10 +34,10 @@ function Register() {
   };
 
   return (
-    <div className="reigster-container">
+    <div className="login-container">
       <Toaster />
-      <div className="register">
-        <h2 className="register-text">Register</h2>
+      <div className="login">
+        <h2 className="login-text">Register</h2>
 
         <form onSubmit={Submit} className="register-form">
           <input type="text" ref={nameRef} placeholder="Enter user name" />{" "}
