@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import axios from "../axios";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -30,7 +30,6 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <Toaster />
       <div className="login">
         <h2 className="login-text">Login</h2>
         <form className="login-form" onSubmit={handleSubmit}>

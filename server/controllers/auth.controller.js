@@ -107,9 +107,22 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+const getProfile = async (req, res) => {
+  const { token } = req.cookies;
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+      if (err) throw err;
+      res.status(200).json(user);
+    });
+  } else {
+    res.status(200).json(null);
+  }
+};
+
 module.exports = {
   registerAccount,
   showAccounts,
   login,
   deleteAccount,
+  getProfile,
 };

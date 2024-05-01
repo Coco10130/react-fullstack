@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import axios from "../axios";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 function Register() {
@@ -35,7 +35,6 @@ function Register() {
 
   return (
     <div className="login-container">
-      <Toaster />
       <div className="login">
         <h2 className="login-text">Register</h2>
 

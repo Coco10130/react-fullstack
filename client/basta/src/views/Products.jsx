@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import axios from "../axios";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
+import { UserContext } from "../../context/UserContext";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editableProductId, setEditableProductId] = useState(null);
+  const { user } = useContext(UserContext);
   const nameRef = useRef();
   const priceRef = useRef();
   const quantityRef = useRef();
@@ -104,7 +106,6 @@ const Products = () => {
     <>
       <div className="container mt-5 d-flex flex-column justify-content-center align-items-center mb-5">
         <h2 className="mb-5 title">Products</h2>
-        <Toaster />
 
         <div className="product-input-container">
           <form
