@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import axios from "../axios";
 import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -25,6 +26,8 @@ function Register() {
         passwordRef.current.value = "";
 
         toast.success(data.success);
+
+        navigate("/login");
       } else {
         toast.error(data.message);
       }

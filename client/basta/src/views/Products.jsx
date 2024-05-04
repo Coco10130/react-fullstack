@@ -4,10 +4,10 @@ import { toast } from "react-hot-toast";
 import { UserContext } from "../../context/UserContext";
 
 const Products = () => {
+  const { user } = useContext(UserContext);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editableProductId, setEditableProductId] = useState(null);
-  const { user } = useContext(UserContext);
   const nameRef = useRef();
   const priceRef = useRef();
   const quantityRef = useRef();
@@ -15,9 +15,19 @@ const Products = () => {
   const updateQuantity = useRef();
 
   useEffect(() => {
+    if (!user) {
+      return;
+    } else {
+      console.log("Logged in");
+    }
+
     const fetchTask = async () => {
       try {
-        const response = await axios.get("/api/products");
+        const response = await axios.get("/api/products", {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
         setProducts(response.data);
       } catch (error) {
         console.error(`Error fetching: ${error}`);
@@ -27,7 +37,7 @@ const Products = () => {
     };
 
     fetchTask();
-  }, []);
+  }, [user]);
 
   const handleDelete = async (id) => {
     const productId = id;

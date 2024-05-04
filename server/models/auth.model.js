@@ -1,4 +1,3 @@
-const { MinKey } = require("mongodb");
 const mongoose = require("mongoose");
 
 const AuthSchema = mongoose.Schema(

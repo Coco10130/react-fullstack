@@ -20,7 +20,7 @@ const Login = () => {
       if (data.message) {
         toast.error(data.message);
       } else {
-        navigate("/");
+        navigate("/dashboard");
         toast.success("Login Success");
       }
     } catch (error) {

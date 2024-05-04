@@ -30,10 +30,10 @@ const login = async (req, res) => {
       jwt.sign(
         { email: user.email, id: user._id, name: user.userName },
         process.env.JWT_SECRET,
-        {},
+        { expiresIn: "7d" },
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json(user);
+          res.cookie("token", token).json({ user: user, token: token });
         }
       );
     } else {
@@ -112,11 +112,16 @@ const getProfile = async (req, res) => {
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
       if (err) throw err;
-      res.status(200).json(user);
+      res.status(200).json({ user, token });
     });
   } else {
     res.status(200).json(null);
   }
+};
+
+const logoutUser = async (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out successfully" });
 };
 
 module.exports = {
@@ -125,4 +130,5 @@ module.exports = {
   login,
   deleteAccount,
   getProfile,
+  logoutUser,
 };

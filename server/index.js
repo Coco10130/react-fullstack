@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const productRouter = require("./routes/product.route.js");
 const authRouter = require("./routes/auth.route.js");
+const todoListRouter = require("./routes/todoList.route.js");
 const cors = require("cors");
 const app = express();
 const cookieParser = require("cookie-parser");
@@ -20,6 +21,7 @@ app.use(
 //routes
 app.use("/api/products", productRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/todo", todoListRouter);
 
 // default route
 app.get("/", (req, res) => {
