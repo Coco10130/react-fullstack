@@ -1,8 +1,17 @@
 const Product = require("../models/product.model.js");
+const jwt = require("jsonwebtoken");
 
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({});
+    const { token } = req.cookies;
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const products = await Product.find({ createdBy: user.id });
+
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -21,6 +30,13 @@ const getSingleProduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
+    const { token } = req.cookies;
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const existingProduct = await Product.findOne({ name: req.body.name });
 
     if (existingProduct) {
@@ -34,6 +50,7 @@ const addProduct = async (req, res) => {
       description: req.body.description,
       price: req.body.price,
       quantity: req.body.quantity,
+      createdBy: user.id,
     };
 
     const product = await Product.create(formattedProduct);
@@ -76,6 +93,11 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
+    const { token } = req.cookies;
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const { id } = req.params;
     const product = await Product.findByIdAndDelete(id);
 

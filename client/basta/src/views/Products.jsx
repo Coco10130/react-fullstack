@@ -17,7 +17,7 @@ const Products = () => {
   const updateQuantity = useRef();
 
   useEffect(() => {
-    const fetchTask = async () => {
+    const fetchProducts = async () => {
       try {
         if (!loading && user && user.token) {
           const response = await axios.get("/api/products", {
@@ -41,13 +41,17 @@ const Products = () => {
       }
     };
 
-    fetchTask();
+    fetchProducts();
   }, [loading, user]);
 
   const handleDelete = async (id) => {
     const productId = id;
     try {
-      const { data } = await axios.delete(`/api/products/${productId}`);
+      const { data } = await axios.delete(`/api/products/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
       if (data.success) {
         toast.success(data.success);
         setProducts(products.filter((product) => product._id !== productId));
@@ -69,7 +73,11 @@ const Products = () => {
         quantity: quantityRef.current.value,
       };
 
-      const { data } = await axios.post("/api/products", payload);
+      const { data } = await axios.post("/api/products", payload, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
       if (data.message) {
         toast.error(data.message);
@@ -96,7 +104,11 @@ const Products = () => {
     };
 
     try {
-      const { data } = await axios.put(`/api/products/${id}`, updatedProduct);
+      const { data } = await axios.put(`/api/products/${id}`, updatedProduct, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
       if (data.success) {
         toast.success(data.success);
@@ -120,7 +132,7 @@ const Products = () => {
   return (
     <>
       <div className="container mt-5 d-flex flex-column justify-content-center align-items-center mb-5">
-        <h2 className="mb-5 title">Products</h2>
+        <h1 className="mb-5 title">Products</h1>
 
         <div className="product-input-container">
           <form

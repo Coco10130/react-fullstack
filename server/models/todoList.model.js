@@ -6,7 +6,8 @@ const TodoListSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    postedBy: {
+
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Auth",
       required: true,

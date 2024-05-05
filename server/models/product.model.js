@@ -19,6 +19,12 @@ const ProductSchema = mongoose.Schema(
       default: 0,
     },
 
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Auth",
+      required: true,
+    },
+
     image: {
       type: "string",
       required: false,

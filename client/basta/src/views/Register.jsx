@@ -27,7 +27,7 @@ function Register() {
 
         toast.success(data.success);
 
-        navigate("/login");
+        navigate("/");
       } else {
         toast.error(data.message);
       }
@@ -59,7 +59,7 @@ function Register() {
             Register
           </button>
           <p className="login-here">
-            Already have an account? <Link to="/login">Login</Link>
+            Already have an account? <Link to="/">Login</Link>
           </p>
         </form>
       </div>

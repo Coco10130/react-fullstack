@@ -290,3 +290,39 @@ html {
     font-size: 0.8rem;
     cursor: pointer;
 }
+
+/* T0D0LIST CSS */
+
+.todo-list-container .todo-list-items {
+    list-style-type: none;
+    padding: 20px 40px ;
+    margin: 15px 0;
+    background-color: hsl(0, 0%, 95%);
+    border-radius: 10px;
+    font-family: "Roboto", sans-serif;
+    font-size: 1.4rem;
+    color: hsl(0, 0%, 10%);
+}
+
+.todos-container{
+    width: 75%;
+}
+
+.todo-form input[type="text"] {
+    height: 2.5rem;
+    width: 20rem;
+    border: 1px solid hsl(0, 0%, 10%);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.todo-form .todo-submit-btn {
+    margin-left: 20px;
+    border-radius: 10px;
+}
+
+.card-is-empty {
+    font-size: 3rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
