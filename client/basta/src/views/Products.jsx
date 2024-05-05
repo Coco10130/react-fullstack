@@ -2,9 +2,11 @@ import { useState, useEffect, useRef, useContext } from "react";
 import axios from "../axios";
 import { toast } from "react-hot-toast";
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
-  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { user, loading } = useContext(UserContext);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editableProductId, setEditableProductId] = useState(null);
@@ -15,20 +17,23 @@ const Products = () => {
   const updateQuantity = useRef();
 
   useEffect(() => {
-    if (!user) {
-      return;
-    } else {
-      console.log("Logged in");
-    }
-
     const fetchTask = async () => {
       try {
-        const response = await axios.get("/api/products", {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-        setProducts(response.data);
+        if (!loading && user && user.token) {
+          const response = await axios.get("/api/products", {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          });
+          setProducts(response.data);
+          document.title = "Product";
+        } else if (!loading && !user) {
+          toast.error("Not authenticated");
+          navigate("/");
+        } else {
+          // Handle the case when user or user.token is null
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error(`Error fetching: ${error}`);
       } finally {
@@ -37,7 +42,7 @@ const Products = () => {
     };
 
     fetchTask();
-  }, [user]);
+  }, [loading, user]);
 
   const handleDelete = async (id) => {
     const productId = id;

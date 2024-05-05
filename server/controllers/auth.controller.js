@@ -33,7 +33,10 @@ const login = async (req, res) => {
         { expiresIn: "7d" },
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json({ user: user, token: token });
+          res
+            .cookie("token", token, { httpOnly: true })
+            .status(200)
+            .json({ user: user, token: token });
         }
       );
     } else {
@@ -110,10 +113,12 @@ const deleteAccount = async (req, res) => {
 const getProfile = async (req, res) => {
   const { token } = req.cookies;
   if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-      if (err) throw err;
+    try {
+      const user = jwt.verify(token, process.env.JWT_SECRET);
       res.status(200).json({ user, token });
-    });
+    } catch (err) {
+      res.status(401).json({ message: "Invalid authorization token" });
+    }
   } else {
     res.status(200).json(null);
   }

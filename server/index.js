@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 });
 
 mongoose
-  .connect("mongodb://localhost:27017/backendDB")
+  .connect(process.env.MONGO)
   .then(() => {
     console.log("Connected to DB");
     app.listen(3000, () => {
