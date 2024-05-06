@@ -326,3 +326,33 @@ html {
     font-size: 3rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+/* PRODUCT CARD */
+
+.card img {
+    max-width: 18rem;
+    height: 18rem;
+}
+
+.card {
+    transition: transform 0.5s ease;
+}
+
+.card:hover {
+    transform: scale(1.1);
+}
+
+.card-body .card-name,
+.card-body .card-price,
+.card-body .card-quantity,
+.card-body .buy-btn {
+    font-family: "Roboto", sans-serif;
+}
+
+.card-body .buy-btn {
+    padding: 5px 20px;
+}
+
+.card-body .card-quantity span {
+    font-weight: bold;
+}
