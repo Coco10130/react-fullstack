@@ -1,15 +1,25 @@
-import { useRef, useContext, useState } from "react";
+import { useRef, useContext, useEffect } from "react";
 import axios from "../axios";
 import { toast } from "react-hot-toast";
 import { UserContext } from "../../context/UserContext";
 import ProductCard from "../components/ProductCard";
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
-  const { user, loading } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { user, token, loading } = useContext(UserContext);
   const nameRef = useRef();
   const priceRef = useRef();
   const quantityRef = useRef();
   const imageRef = useRef();
+
+  useEffect(() => {
+    if (!loading && user) {
+      if (!token) {
+        return navigate("/login");
+      }
+    }
+  }, [user, loading]);
 
   const handleAddProduct = async (e) => {
     e.preventDefault();

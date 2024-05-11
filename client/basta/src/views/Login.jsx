@@ -28,7 +28,7 @@ const Login = () => {
         setTimeout(() => {
           toast.dismiss(loadingToastId);
           login(data.data);
-          navigate("/dashboard");
+          navigate("/");
         }, 1000);
       }
     } catch (error) {

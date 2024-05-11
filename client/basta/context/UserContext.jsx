@@ -7,13 +7,22 @@ export const UserContext = createContext({});
 
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { data } = await axios.get("/api/auth/profile");
-        setUser(data);
+        if (!user) {
+          const response = await axios.get("/api/auth/profile");
+          const data = response.data;
+          if (data) {
+            setUser(data);
+            setToken(data.token);
+          } else {
+            console.error("No data received from the server");
+          }
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -35,6 +44,7 @@ export function UserContextProvider({ children }) {
   const logout = () => {
     axios.get("/api/auth/logout").then(({ data }) => {
       setUser(null);
+      setToken(null);
       if (data.message) {
         toast.success(data.message);
       }
@@ -42,7 +52,7 @@ export function UserContextProvider({ children }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, loading }}>
+    <UserContext.Provider value={{ user, login, logout, loading, token }}>
       {children}
     </UserContext.Provider>
   );

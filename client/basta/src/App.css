@@ -19,12 +19,14 @@ html {
     align-items: center;
     justify-content: center;
     width: 100vw;
-    height: 5.5rem;
+    height: 6.8rem;
     background-color: hsl(0, 0%, 95%);
     border-radius: 20px;
+    margin-top: -20px;
 }
 
 header {
+    margin-top: 20px;
     width: 100vw;
 }
 
@@ -33,11 +35,20 @@ header {
     height: 4rem;
     border-radius: 50px;
     margin-left: 4rem;
+    cursor: pointer;
 }
 
 .user-name {
     margin-left: 3rem;
     font-family: "Poetsen One", sans-serif;
+}
+
+.navbar-login {
+    margin-right: 10px;
+}
+
+.logout-btn {
+    margin-left: 20px;
 }
 
 

@@ -2,9 +2,11 @@ import { useState, useRef, useContext, useEffect } from "react";
 import axios from "../axios";
 import { toast } from "react-hot-toast";
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const TodoList = () => {
-  const { user, loading } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { user, loading, token } = useContext(UserContext);
   const todoRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState([]);
@@ -12,10 +14,14 @@ const TodoList = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        if (!loading && user && user.token) {
+        if (!loading && user && token) {
+          if (!token) {
+            return navigate("/login");
+          }
+
           const response = await axios.get("/api/todo", {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${token}`,
             },
           });
 
@@ -28,6 +34,8 @@ const TodoList = () => {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -39,7 +47,7 @@ const TodoList = () => {
     try {
       const { data } = await axios.delete(`/api/todo/${taskId}`, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -61,7 +69,7 @@ const TodoList = () => {
     try {
       const { data } = await axios.post("/api/todo", payload, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 

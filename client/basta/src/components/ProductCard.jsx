@@ -2,35 +2,39 @@ import axios from "../axios.js";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = () => {
+  const navigate = useNavigate();
   const [cards, setCards] = useState([]);
-  const { user, loading } = useContext(UserContext);
+  const { user, loading, token } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        if (!loading && user && user.token) {
+        if (!loading && user && token) {
           const response = await axios.get("/api/products", {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${token}`,
             },
           });
 
           setCards(response.data);
         } else if (!loading && !user) {
           toast.error("Not authenticated");
-          navigate("/");
         } else {
           setIsLoading(false);
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
+
     fetchProducts();
-  }, [cards]);
+  }, [user, loading, cards]);
 
   return (
     <>
