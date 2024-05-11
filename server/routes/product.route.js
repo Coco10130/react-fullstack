@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const authMiddleware = require("../helpers/authMiddleware.js");
+const authMiddleware = require("../middlewares/auth.middleware.js");
+const uploadMiddleware = require("../middlewares/multer.middleware.js");
 const {
   getSingleProduct,
   getProducts,
@@ -12,11 +13,11 @@ const {
 // require auth for all products
 router.use(authMiddleware);
 
+router.post("/", uploadMiddleware.single("image"), addProduct);
+
 router.get("/", getProducts);
 
 router.get("/:id", getSingleProduct);
-
-router.post("/", addProduct);
 
 router.put("/:id", updateProduct);
 

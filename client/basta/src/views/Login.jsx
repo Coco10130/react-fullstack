@@ -1,12 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState, useContext } from "react";
 import axios from "../axios";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const email = useRef();
   const password = useRef();
+  const { login } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,14 +16,20 @@ const Login = () => {
       email: email.current.value,
       password: password.current.value,
     };
+
     try {
       const { data } = await axios.post("/api/auth/login", payload);
 
       if (data.message) {
         toast.error(data.message);
       } else {
-        navigate("/dashboard");
-        toast.success("Login Success");
+        const loadingToastId = toast.loading("Loading...");
+
+        setTimeout(() => {
+          toast.dismiss(loadingToastId);
+          login(data.data);
+          navigate("/dashboard");
+        }, 1000);
       }
     } catch (error) {
       console.error(`Error: ${error}`);

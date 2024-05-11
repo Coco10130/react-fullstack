@@ -85,7 +85,7 @@ const TodoList = () => {
       <div className="container-fluid d-flex flex-column justify-content-center align-items-center">
         <div className="row">
           <div className="col">
-            <h1 className="mt-5 mb-5">Todo List</h1>
+            <h1 className="todo-list-title mt-5 mb-5">Todo List</h1>
           </div>
         </div>
 

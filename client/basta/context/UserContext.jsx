@@ -27,6 +27,11 @@ export function UserContextProvider({ children }) {
     }
   }, [user]);
 
+  // fetch user data after logging in
+  const login = (userData) => {
+    setUser(userData);
+  };
+
   const logout = () => {
     axios.get("/api/auth/logout").then(({ data }) => {
       setUser(null);
@@ -37,7 +42,7 @@ export function UserContextProvider({ children }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout, loading }}>
+    <UserContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </UserContext.Provider>
   );

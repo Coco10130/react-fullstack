@@ -1,5 +1,3 @@
-/* import AnyaImg from "../assets/anya-img.jpg"; */
-import AnyaImg from "../assets/images.jpg";
 import axios from "../axios.js";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
@@ -32,7 +30,7 @@ const ProductCard = () => {
       }
     };
     fetchProducts();
-  });
+  }, [cards]);
 
   return (
     <>
@@ -44,13 +42,15 @@ const ProductCard = () => {
               <div className="loader-text">Loading...</div>
             </div>
           ) : cards.length === 0 ? (
-            <p className="card-is-empty">product list is empty</p>
+            <p className="card-is-empty text-center mt-5">
+              product list is empty
+            </p>
           ) : (
             cards.map((card, index) => (
               <div className="col-4 mt-5" key={index}>
                 <div className="card" style={{ width: "18rem" }}>
                   <img
-                    src={AnyaImg}
+                    src={`/images/${card.image}`}
                     className="card-img-top"
                     alt="Basta Image"
                   />

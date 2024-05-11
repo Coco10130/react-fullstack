@@ -3,6 +3,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: row;
+
 }
 
 
@@ -21,6 +22,22 @@ html {
     height: 5.5rem;
     background-color: hsl(0, 0%, 95%);
     border-radius: 20px;
+}
+
+header {
+    width: 100vw;
+}
+
+.user-img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50px;
+    margin-left: 4rem;
+}
+
+.user-name {
+    margin-left: 3rem;
+    font-family: "Poetsen One", sans-serif;
 }
 
 
@@ -139,10 +156,7 @@ html {
 }
 
 .product-title {
-    font-size: 1.6rem;
     font-family: "Roboto", sans-serif;
-    border-bottom: 2px solid hsl(0, 0%, 80%);
-    padding: 0 0 10px 0;
 }
 
 .text {
@@ -293,6 +307,10 @@ html {
 
 /* T0D0LIST CSS */
 
+.todo-list-title {
+    font-family: "Roboto", sans-serif;
+}
+
 .todo-list-container .todo-list-items {
     list-style-type: none;
     padding: 20px 40px ;
@@ -335,11 +353,12 @@ html {
 }
 
 .card {
-    transition: transform 0.5s ease;
+    transition: transform 0.5s ease, box-shadow 0.6s ease;
 }
 
 .card:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    box-shadow: 5px 5px 5px 10px hsla(0, 0%, 20%, 0.5);
 }
 
 .card-body .card-name,
