@@ -4,6 +4,7 @@ const productRouter = require("./routes/product.route.js");
 const authRouter = require("./routes/auth.route.js");
 const todoListRouter = require("./routes/todoList.route.js");
 const galleryRouter = require("./routes/gallery.route.js");
+const profileRouter = require("./routes/profile.route.js");
 const cors = require("cors");
 const app = express();
 const cookieParser = require("cookie-parser");
@@ -24,6 +25,7 @@ app.use("/api/products", productRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/todo", todoListRouter);
 app.use("/api/gallery", galleryRouter);
+app.use("/api/profile", profileRouter);
 
 // default route
 app.get("/", (req, res) => {

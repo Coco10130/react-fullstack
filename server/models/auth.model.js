@@ -19,6 +19,16 @@ const AuthSchema = mongoose.Schema(
       required: true,
       minLength: 8,
     },
+
+    image: {
+      type: String,
+      required: false,
+    },
+
+    birthdate: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,

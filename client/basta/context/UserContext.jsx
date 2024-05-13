@@ -51,8 +51,17 @@ export function UserContextProvider({ children }) {
     });
   };
 
+  const updateUserProfile = (newProfile) => {
+    setUser((user) => ({
+      ...user,
+      profile: newProfile,
+    }));
+  };
+
   return (
-    <UserContext.Provider value={{ user, login, logout, loading, token }}>
+    <UserContext.Provider
+      value={{ user, login, logout, updateUserProfile, loading, token }}
+    >
       {children}
     </UserContext.Provider>
   );

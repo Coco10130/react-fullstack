@@ -110,6 +110,11 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+const logoutUser = async (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out successfully" });
+};
+
 const getProfile = async (req, res) => {
   const { token } = req.cookies;
   if (token) {
@@ -120,13 +125,8 @@ const getProfile = async (req, res) => {
       res.status(401).json({ message: "Invalid authorization token" });
     }
   } else {
-    res.status(200).json(null);
+    res.status(401).json({ message: "Not authorized" });
   }
-};
-
-const logoutUser = async (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ message: "Logged out successfully" });
 };
 
 module.exports = {
@@ -134,6 +134,6 @@ module.exports = {
   showAccounts,
   login,
   deleteAccount,
-  getProfile,
   logoutUser,
+  getProfile,
 };

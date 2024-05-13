@@ -1,11 +1,32 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import axios from "../axios";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const { user, logout } = useContext(UserContext);
+  const { user, logout, loading, token } = useContext(UserContext);
+  const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        if (!loading && user && token) {
+          const response = await axios.get("/api/profile", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          setProfile(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProfile();
+  }, [user, loading, token]);
 
   const handleLogout = () => {
     logout();
@@ -20,12 +41,16 @@ const NavBar = () => {
             <>
               <div className="col-10 d-flex align-items-center justify-content-start">
                 <img
-                  src="/images/anya-img.jpg"
+                  src={
+                    profile.image
+                      ? `/images/${profile.image}`
+                      : "/images/default-img.png"
+                  }
                   alt="User Profile"
                   onClick={() => navigate("/profile")}
                   className="user-img"
                 />
-                <h3 className="user-name">{user.user.name}</h3>
+                <h3 className="user-name">{profile.userName}</h3>
               </div>
 
               <div className="col-2 d-flex align-items-center justify-content-center">

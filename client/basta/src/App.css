@@ -458,3 +458,36 @@ header {
     text-decoration: none;
     cursor: pointer;
   }
+
+  /* PROFILE CSS */
+
+  .profile-container {
+    margin-top: 80px;
+    height: 71vh;
+    width: 100vw;
+  }
+
+  .profile-background {
+    background-color: hsl(0, 0%, 75%);
+    border-radius: 20px;
+    height: 30rem;
+    width: 80rem;
+    padding: 10px;
+  }
+
+  .profile-title {
+    margin: 20px 30px;
+    width: auto;
+    padding-bottom: 10px;
+    border-bottom: 3px solid black;
+  }
+
+  .profile-col {
+    height: 22rem;
+  }
+
+  .image-btn {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+  }
