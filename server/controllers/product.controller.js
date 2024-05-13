@@ -39,7 +39,10 @@ const addProduct = async (req, res) => {
 
     const user = jwt.verify(token, process.env.JWT_SECRET);
     const imageFile = req.file.filename;
-    const existingProduct = await Product.findOne({ name: req.body.name });
+    const existingProduct = await Product.findOne({
+      name: req.body.name,
+      createdBy: user.id,
+    });
 
     if (existingProduct) {
       return res.status(200).json({ message: "Product already exists" });

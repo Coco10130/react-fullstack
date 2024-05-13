@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Loading from "./Loading.jsx";
 
 const ProductCard = () => {
   const navigate = useNavigate();
@@ -41,10 +42,7 @@ const ProductCard = () => {
       <div className="container-fluid">
         <div className="row">
           {isLoading ? (
-            <div className="loader-container" style={{ marginTop: "15rem" }}>
-              <div className="loader"></div>
-              <div className="loader-text">Loading...</div>
-            </div>
+            <Loading />
           ) : cards.length === 0 ? (
             <p className="card-is-empty text-center mt-5">
               product list is empty

@@ -3,15 +3,13 @@ const mongoose = require("mongoose");
 const GallerySchema = mongoose.Schema(
   {
     image: {
-      type: String,
+      type: "string",
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
-    date: {
-      type: Date,
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Auth",
       required: true,
     },
   },
