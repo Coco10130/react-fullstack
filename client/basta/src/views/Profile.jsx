@@ -2,12 +2,17 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { UserContext } from "../../context/UserContext";
 import axios from "../axios";
 import { toast } from "react-hot-toast";
-import Loading from "../components/Loading";
+import { MdEdit } from "react-icons/md";
+import { FaSave } from "react-icons/fa";
 
 const Profile = () => {
   const { user, loading, token, updateUserProfile } = useContext(UserContext);
   const [profile, setProfile] = useState({});
+  const [editable, setEditable] = useState(false);
   const imageRef = useRef();
+  const [name, setName] = useState();
+  const [contact, setContact] = useState();
+  const [birthdate, setBirthdate] = useState();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -58,6 +63,18 @@ const Profile = () => {
     }
   };
 
+  const hanldeProfileChange = async (e) => {
+    e.preventDefault();
+
+    if (!editable) {
+      console.log("Execute code");
+      console.log(name);
+      console.log(birthdate);
+    } else {
+      console.log("Don't execute code");
+    }
+  };
+
   return (
     <>
       <div className="profile-container d-flex align-items-center justify-content-center">
@@ -69,6 +86,7 @@ const Profile = () => {
           </div>
 
           <div className="row">
+            {/* Left column */}
             <div className="col-4 d-flex justify-content-center align-items-center profile-col">
               <label htmlFor="file_picker" className="profile-button">
                 <img
@@ -91,7 +109,107 @@ const Profile = () => {
                 />
               </label>
             </div>
-            <div className="col-8"></div>
+
+            {/* Right column */}
+            <div className="col-8 d-flex align-items-center justify-content-center flex-column">
+              <form onSubmit={hanldeProfileChange} className="w-100">
+                <div className="row profile-user-name w-100">
+                  <div className="col-6 text-end">
+                    <p className="profile-tag">User Name: </p>
+                  </div>
+                  <div className="col-6 text-start">
+                    {editable ? (
+                      <input
+                        type="text"
+                        onChange={(e) => setName(e.target.value)}
+                        className="profile-details-edit"
+                        defaultValue={profile.userName}
+                      />
+                    ) : (
+                      <p className="profile-details">{profile.userName}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="row profile-email w-100">
+                  <div className="col-6 text-end">
+                    <p className="profile-tag">Email: </p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="profile-details">{profile.email}</p>
+                  </div>
+                </div>
+
+                <div className="row profile-email w-100">
+                  <div className="col-6 text-end">
+                    <p className="profile-tag">Contact Number: </p>
+                  </div>
+                  <div className="col-6 text-start">
+                    {editable ? (
+                      <input
+                        type="number"
+                        min={9}
+                        onChange={(e) => setContact(e.targer.value)}
+                        className="profile-details-edit"
+                        defaultValue={profile.phoneNumber}
+                      />
+                    ) : (
+                      <p className="profile-details">{profile.phoneNumber}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="row profile-birthdate w-100">
+                  <div className="col-6 text-end">
+                    <p className="profile-tag">Birthdate: </p>
+                  </div>
+                  <div className="col-6 text-start">
+                    {editable ? (
+                      <input
+                        type="text" // Change type to "text" for manual input
+                        placeholder="YY/MM/DD" // Display placeholder format
+                        onChange={(e) => {
+                          // Format input to YYYY-MM-DD before setting state
+                          const formattedDate = e.target.value
+                            .padStart(8, "0")
+                            .replace(/(\d{2})(\d{2})/, "$1/$2");
+                          setBirthdate(formattedDate);
+                        }}
+                        className="profile-details-edit"
+                        defaultValue={
+                          profile.birthdate
+                            ? profile.birthdate.slice(0, 10)
+                            : ""
+                        } // Extract YYYY-MM-DD from existing date
+                      />
+                    ) : (
+                      <p className="profile-details">{profile.birthdate}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-11 d-flex align-items-end justify-content-end">
+                    {editable ? (
+                      <button
+                        type="submit"
+                        onClick={() => setEditable(!editable)}
+                        className="edit-profile-btn btn btn-outline-secondary"
+                      >
+                        <FaSave className="edit-icon" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setEditable(!editable)}
+                        className="edit-profile-btn btn btn-outline-secondary"
+                      >
+                        <MdEdit className="edit-icon" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>

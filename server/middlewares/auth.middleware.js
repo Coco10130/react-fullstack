@@ -16,12 +16,6 @@ const authMiddleware = async (req, res, next) => {
     } else {
       res.status(401).json({ message: "Authorization token required" });
     }
-
-    // Split the autorization header
-    // const token = authorization.split(" ")[1];
-
-    /* req.user = await User.findOne({ _id }).select("_id");
-    next(); */
   } catch (error) {
     return res.status(401).json({ message: "Invalid authorization token" });
   }

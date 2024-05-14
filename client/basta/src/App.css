@@ -470,7 +470,6 @@ header {
   .profile-background {
     background-color: hsl(0, 0%, 75%);
     border-radius: 20px;
-    height: 30rem;
     width: 80rem;
     padding: 10px;
   }
@@ -491,3 +490,33 @@ header {
     height: 150px;
     border-radius: 100px;
   }
+
+.profile-tag,
+.profile-details {
+    font-size: 1.3rem;
+    margin: 10px 10px;
+    font-family: "Poppins", sans-serif;
+    padding: 10px;
+}
+
+.profile-details {
+    font-weight: bold;
+}
+
+.edit-icon {
+    font-size: 1.6rem;
+}
+
+.edit-profile-btn {
+    margin: 20px 0px;
+}
+
+.profile-details-edit {
+    background-color: hsl(0, 0%, 95%);
+    font-size: 1.3rem;
+    margin: 10px 10px;
+    font-family: "Poppins", sans-serif;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+}

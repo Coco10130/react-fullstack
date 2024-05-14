@@ -26,7 +26,12 @@ const AuthSchema = mongoose.Schema(
     },
 
     birthdate: {
-      type: Date,
+      type: String,
+      required: false,
+    },
+
+    phoneNumber: {
+      type: String,
       required: false,
     },
   },
