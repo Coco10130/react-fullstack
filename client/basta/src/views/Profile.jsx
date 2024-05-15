@@ -66,12 +66,36 @@ const Profile = () => {
   const hanldeProfileChange = async (e) => {
     e.preventDefault();
 
-    if (!editable) {
-      console.log("Execute code");
-      console.log(name);
-      console.log(birthdate);
-    } else {
-      console.log("Don't execute code");
+    try {
+      if (!editable) {
+        const id = profile._id;
+
+        const payload = {
+          userName: name,
+          contact: contact,
+          birthdate: birthdate,
+        };
+
+        const { data } = await axios.put(
+          `/api/profile/update-details/${id}`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (data.success) {
+          toast.success(data.success);
+          setProfile(data.data);
+          updateUserProfile(data.data);
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -148,8 +172,7 @@ const Profile = () => {
                     {editable ? (
                       <input
                         type="number"
-                        min={9}
-                        onChange={(e) => setContact(e.targer.value)}
+                        onChange={(e) => setContact(e.target.value)}
                         className="profile-details-edit"
                         defaultValue={profile.phoneNumber}
                       />
@@ -166,21 +189,10 @@ const Profile = () => {
                   <div className="col-6 text-start">
                     {editable ? (
                       <input
-                        type="text" // Change type to "text" for manual input
-                        placeholder="YY/MM/DD" // Display placeholder format
-                        onChange={(e) => {
-                          // Format input to YYYY-MM-DD before setting state
-                          const formattedDate = e.target.value
-                            .padStart(8, "0")
-                            .replace(/(\d{2})(\d{2})/, "$1/$2");
-                          setBirthdate(formattedDate);
-                        }}
+                        type="date"
                         className="profile-details-edit"
-                        defaultValue={
-                          profile.birthdate
-                            ? profile.birthdate.slice(0, 10)
-                            : ""
-                        } // Extract YYYY-MM-DD from existing date
+                        max={new Date().toISOString().split("T")[0]}
+                        onChange={(e) => setBirthdate(e.target.value)}
                       />
                     ) : (
                       <p className="profile-details">{profile.birthdate}</p>
